@@ -342,11 +342,11 @@ export default class VueAuthenticate {
       data.append('client_id', this.options.clientId);
     }
 
-    if (this.options.refreshType === 'storage') 
+    if (this.options.refreshType === 'storage')
       data.append('refresh_token', this.getRefreshToken());
 
     requestOptions = makeRequestOptions(requestOptions, this.options, 'refreshUrl', data);
-    return this.$http(requestOptions)
+    return this.$http(requestOptions, {"Content-Type": "application/x-www-form-urlencoded"})
       .then((response) => {
         this.setToken(response);
         this.setRefreshToken(response);
