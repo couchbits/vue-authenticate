@@ -529,6 +529,7 @@ var defaultOptions = {
   // 3. (null): refresh token is not use
   refreshType: null,
   refreshTokenName: 'refresh_token',
+  clientId: null,
   refreshTokenPrefix: null,
   expirationName: 'expiration',
   expirationPrefix: null,
@@ -1555,10 +1556,15 @@ VueAuthenticate.prototype.refresh = function refresh (requestOptions) {
   if (!this.options.storageType)
     { throw new Error('Refreshing is not set'); }
 
-  var data = {};
+  var data = new FormData();
+  data.append('grant_type', 'refresh_token');
 
-  if (this.options.refreshType === 'storage')
-    { data.refresh_token = this.getRefreshToken(); }
+  if (this.options.clientId !== null) {
+    data.append('client_id', this.options.clientId);
+  }
+
+  if (this.options.refreshType === 'storage') 
+    { data.append('refresh_token', this.getRefreshToken()); }
 
   requestOptions = makeRequestOptions(requestOptions, this.options, 'refreshUrl', data);
   return this.$http(requestOptions)
