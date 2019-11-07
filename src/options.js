@@ -35,6 +35,7 @@ export default {
   // 3. (null): refresh token is not use
   refreshType: null,
   refreshTokenName: 'refresh_token',
+  clientId: null,
   refreshTokenPrefix: null,
   expirationName: 'expiration',
   expirationPrefix: null,
