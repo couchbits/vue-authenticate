@@ -1317,10 +1317,12 @@ VueAuthenticate.prototype.isAuthenticated = function isAuthenticated () {
         if (typeof exp === 'number') {// JWT with an optional expiration claims
 
           var tokenIsNotExpired = Math.round(new Date().getTime() / 1000) < exp;
-          if (!tokenIsNotExpired && !this.options.refreshType){
-            return tokenIsNotExpired
+          if (tokenIsNotExpired){
+            return true; // token still valid.
+          }else if (!tokenIsNotExpired && !this.options.refreshType){
+            return tokenIsNotExpired // token is expired and no refresh type is set
           } else {
-            this.refresh();
+            this.refresh(); // token expired -> need to refresh
             return true;
           }
         }
