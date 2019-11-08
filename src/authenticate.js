@@ -101,9 +101,9 @@ export default class VueAuthenticate {
           const exp = parseJWT(token).exp;
           if (typeof exp === 'number') {  // JWT with an optional expiration claims
 
-            let tokenIsExpired = Math.round(new Date().getTime() / 1000) < exp;
-            if (tokenIsExpired && !this.options.refreshType){
-              return tokenIsExpired
+            let tokenIsNotExpired = Math.round(new Date().getTime() / 1000) < exp;
+            if (!tokenIsNotExpired && !this.options.refreshType){
+              return tokenIsNotExpired
             } else {
               this.refresh()
               return true;
