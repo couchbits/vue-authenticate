@@ -61,7 +61,7 @@ export default {
     const tokenHeader = $auth.options.tokenHeader;
 
     $auth.$http.interceptors.request.use((request) => {
-      if ($auth.isAuthenticated()) {
+      if ($auth._isRefreshing || $auth.isAuthenticated()) {
         request.headers[tokenHeader] = [
           $auth.options.tokenType, $auth.getToken()
         ].join(' ')

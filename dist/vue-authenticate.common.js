@@ -557,7 +557,7 @@ var defaultOptions = {
     var tokenHeader = $auth.options.tokenHeader;
 
     $auth.$http.interceptors.request.use(function (request) {
-      if ($auth.isAuthenticated()) {
+      if ($auth._isRefreshing || $auth.isAuthenticated()) {
         request.headers[tokenHeader] = [
           $auth.options.tokenType, $auth.getToken()
         ].join(' ');
@@ -1315,7 +1315,14 @@ VueAuthenticate.prototype.isAuthenticated = function isAuthenticated () {
       try { // Could be a valid JWT or an access token with the same format
         var exp = parseJWT(token).exp;
         if (typeof exp === 'number') {// JWT with an optional expiration claims
-          return Math.round(new Date().getTime() / 1000) < exp;
+
+          var tokenIsExpired = Math.round(new Date().getTime() / 1000) < exp;
+          if (tokenIsExpired && !this.options.refreshType){
+            return tokenIsExpired
+          } else {
+            this.refresh();
+            return true;
+          }
         }
       } catch (e) {
         return true;// Pass: Non-JWT token that looks like JWT

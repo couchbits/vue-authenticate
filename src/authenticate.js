@@ -100,7 +100,14 @@ export default class VueAuthenticate {
         try { // Could be a valid JWT or an access token with the same format
           const exp = parseJWT(token).exp;
           if (typeof exp === 'number') {  // JWT with an optional expiration claims
-            return Math.round(new Date().getTime() / 1000) < exp;
+
+            let tokenIsExpired = Math.round(new Date().getTime() / 1000) < exp;
+            if (tokenIsExpired && !this.options.refreshType){
+              return tokenIsExpired
+            } else {
+              this.refresh()
+              return true;
+            }
           }
         } catch (e) {
           return true;  // Pass: Non-JWT token that looks like JWT
