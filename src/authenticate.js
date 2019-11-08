@@ -107,12 +107,7 @@ export default class VueAuthenticate {
             }else if (!tokenIsNotExpired && !this.options.refreshType){
               return tokenIsNotExpired // token is expired and no refresh type is set
             } else {
-              if (!this._isRefreshing){
-                this._isRefreshing = true;
-                this.refresh()// token expired -> need to refresh
-                  .then(() => { this._isRefreshing = false; })
-                  .catch(() => { this._isRefreshing = false; })
-              }
+              // will be handeled by interceptor
               return true;
             }
           }

@@ -1322,7 +1322,7 @@ VueAuthenticate.prototype.isAuthenticated = function isAuthenticated () {
           }else if (!tokenIsNotExpired && !this.options.refreshType){
             return tokenIsNotExpired // token is expired and no refresh type is set
           } else {
-            this.refresh(); // token expired -> need to refresh
+            // will be handeled by interceptor
             return true;
           }
         }
